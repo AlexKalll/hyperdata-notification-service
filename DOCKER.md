@@ -28,7 +28,7 @@ docker build -t notification-service:1.0.0 .
 ```bash
 docker run -d \
   --name notification-service \
-  -p 3000:3000 \
+  -p 3002:3002 \
   -e DB_HOST=your-postgres-host \
   -e DB_PORT=5432 \
   -e DB_USERNAME=postgres \
@@ -72,7 +72,7 @@ Then run:
 ```bash
 docker run -d \
   --name notification-service \
-  -p 3000:3000 \
+  -p 3002:3002 \
   --env-file .env \
   notification-service:latest
 ```
@@ -124,7 +124,7 @@ docker inspect --format='{{json .State.Health}}' notification-service
 You can also manually check the health endpoint:
 
 ```bash
-curl http://localhost:3000/health
+curl http://localhost:3002/health
 ```
 
 ## Viewing Logs
@@ -166,7 +166,7 @@ This results in a smaller final image size and improved security.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| PORT | No | 3000 | Application port |
+| PORT | No | 3002 | Application port |
 | NODE_ENV | No | production | Node environment |
 | DB_HOST | Yes | - | PostgreSQL host |
 | DB_PORT | Yes | - | PostgreSQL port |
@@ -201,13 +201,13 @@ Common issues:
 ### Health check failing
 
 The health check verifies:
-- Application is responding on port 3000
+- Application is responding on port 3002
 - Database connection is healthy
 - RabbitMQ connection is healthy
 
 Check the health endpoint manually:
 ```bash
-docker exec notification-service wget -qO- http://localhost:3000/health
+docker exec notification-service wget -qO- http://localhost:3002/health
 ```
 
 ### Cannot connect to external services

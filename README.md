@@ -86,7 +86,7 @@ Create a `.env` file in the root directory with the following variables:
 
 ```env
 # Server Configuration
-PORT=3000
+PORT=3002
 NODE_ENV=development
 
 # Database Configuration
@@ -119,7 +119,7 @@ LOG_LEVEL=info
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `PORT` | Server port | `3000` |
+| `PORT` | Server port | `3002` |
 | `DB_HOST` | PostgreSQL host | `localhost` |
 | `DB_PORT` | PostgreSQL port | `5432` |
 | `DB_USERNAME` | Database username | `postgres` |
@@ -181,7 +181,7 @@ pnpm run start:prod
 pnpm run start:debug
 ```
 
-The service will be available at `http://localhost:3000` (or your configured PORT).
+The service will be available at `http://localhost:3002` (or your configured PORT).
 
 ## CI/CD Pipeline
 
@@ -190,8 +190,8 @@ The service will be available at `http://localhost:3000` (or your configured POR
 The project includes a complete CI/CD pipeline that automatically builds and deploys your application.
 
 **Workflow Triggers:**
-- Push to `master` branch → Deploy to production (port 3000)
-- Push to `staging` branch → Deploy to staging (port 3001)
+- Push to `master` branch → Deploy to production (port 3002)
+- Push to `staging` branch → Deploy to staging (port 3003)
 - Manual trigger from GitHub Actions tab
 
 **Deployment Process:**
@@ -323,7 +323,7 @@ docker build -t notification-service:latest .
 # Run container
 docker run -d \
   --name notification-service \
-  -p 3000:3000 \
+  -p 3002:3002 \
   --env-file .env.prod \
   --restart unless-stopped \
   notification-service:latest
@@ -422,7 +422,7 @@ docker-compose logs -f notification-service
 Check service health:
 
 ```bash
-curl http://localhost:3000/api/health
+curl http://localhost:3002/api/health
 ```
 
 ## License
