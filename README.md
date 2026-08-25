@@ -1,6 +1,6 @@
 # Notification Microservice
 
-A real-time notification service built with NestJS that integrates with Leyu backend systems. The service consumes notification events from RabbitMQ, persists them in PostgreSQL, and delivers them to users via REST API.
+A real-time notification service built with NestJS that integrates with Mahder backend systems. The service consumes notification events from RabbitMQ, persists them in PostgreSQL, and delivers them to users via REST API.
 
 ## Features
 
@@ -28,7 +28,7 @@ A real-time notification service built with NestJS that integrates with Leyu bac
 
 ```
 ┌─────────────────┐
-│  Leyu Backend   │
+│  Mahder Backend   │
 └────────┬────────┘
          │ Publish Events
          ▼
