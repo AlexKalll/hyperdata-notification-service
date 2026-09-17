@@ -28,7 +28,7 @@ A real-time notification service built with NestJS that integrates with Mahder b
 
 ```
 ┌─────────────────┐
-│  Mahder Backend │
+│  Mahder Backend   │
 └────────┬────────┘
          │ Publish Events
          ▼
