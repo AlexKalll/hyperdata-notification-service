@@ -8,10 +8,10 @@ WORKDIR /app
 RUN npm install -g pnpm@9
 
 # Copy dependency files
-COPY package.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Install dependencies
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -29,18 +29,17 @@ WORKDIR /app
 RUN npm install -g pnpm@9
 
 # Copy dependency files
-COPY package.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Install production dependencies only
-RUN pnpm install --prod
-
-# Copy built application from builder
-COPY --from=builder /app/dist ./dist
+RUN pnpm install --prod --frozen-lockfile
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nestjs -u 1001 && \
-    chown -R nestjs:nodejs /app
+    adduser -S nestjs -u 1001
+
+# Copy built application with the correct runtime ownership. Dependencies remain root-owned and read-only to the application user, avoiding a slow recursive chown over the complete node_modules tree.
+COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 
 # Switch to non-root user
 USER nestjs
