@@ -17,6 +17,11 @@ Section 4(b) of the Apache License, Version 2.0.
 - Added notification-service lint and build checks for pull requests and main-branch pushes.
 - Added a guarded production deployment job that invokes the shared Hyperdata VPS deployment script after a successful build.
 
+## 2026-09-22: Netcup production deployment baseline
+
+- Added the notification service to the isolated Hyperdata Compose deployment model.
+- Documented shared PostgreSQL/RabbitMQ production configuration and safe side-effect defaults.
+
 ## How to record future changes
 - When making non-trivial modifications, add a short entry under a new dated section below
 - Split commits by cohesive behavior or deployable concern, use Conventional Commit messages
