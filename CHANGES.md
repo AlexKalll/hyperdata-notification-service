@@ -13,6 +13,10 @@ Section 4(b) of the Apache License, Version 2.0.
 - Fixed the TypeORM schema configuration typo (`DATABASE_SCHEMAA` to `DATABASE_SCHEMA`).
 - Documented the required `DB_URL` and `DATABASE_SCHEMA` variables for local PostgreSQL and Docker-network setup.
 
+### 2026-10-05: GitHub Actions CI/CD
+- Added notification-service lint and build checks for pull requests and main-branch pushes.
+- Added a guarded production deployment job that invokes the shared Hyperdata VPS deployment script after a successful build.
+
 ## How to record future changes
 - When making non-trivial modifications, add a short entry under a new dated section below
 - Split commits by cohesive behavior or deployable concern, use Conventional Commit messages
