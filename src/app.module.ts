@@ -19,7 +19,7 @@ import { CorrelationIdMiddleware } from './common/middleware/correlation-id.midd
       isGlobal: true,
       load: [configuration],
       validationSchema: Joi.object({
-        PORT: Joi.number().default(3000),
+        PORT: Joi.number().default(3002),
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test')
           .default('development'),

@@ -56,7 +56,7 @@ async function bootstrap() {
   // Configure graceful shutdown hooks
   app.enableShutdownHooks();
 
-  const port = configService.get<number>('port') || 3000;
+  const port = configService.get<number>('port') || 3002;
   const environment = configService.get<string>('nodeEnv') || 'development';
 
   // Start HTTP server first

@@ -28,12 +28,14 @@ docker build -t notification-service:1.0.0 .
 ```bash
 docker run -d \
   --name notification-service \
-  -p 3000:3000 \
+  -p 3002:3002 \
   -e DB_HOST=your-postgres-host \
   -e DB_PORT=5432 \
   -e DB_USERNAME=postgres \
   -e DB_PASSWORD=your-password \
   -e DB_DATABASE=notifications \
+  -e DB_URL=postgresql://postgres:your-password@your-postgres-host:5432/notifications \
+  -e DATABASE_SCHEMA=public \
   -e RABBITMQ_HOST=your-rabbitmq-host \
   -e RABBITMQ_PORT=5672 \
   -e RABBITMQ_USERNAME=guest \
@@ -56,6 +58,8 @@ DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=your-password
 DB_DATABASE=notifications
+DB_URL=postgresql://postgres:your-password@your-postgres-host:5432/notifications
+DATABASE_SCHEMA=public
 RABBITMQ_HOST=your-rabbitmq-host
 RABBITMQ_PORT=5672
 RABBITMQ_USERNAME=guest
@@ -72,7 +76,7 @@ Then run:
 ```bash
 docker run -d \
   --name notification-service \
-  -p 3000:3000 \
+  -p 3002:3002 \
   --env-file .env \
   notification-service:latest
 ```
@@ -99,6 +103,26 @@ Stop and remove volumes:
 docker-compose down -v
 ```
 
+### Hyperdata local backend network
+
+The local `D:\@hyperdata\hyperdata-notification-service\.env` is configured to
+reuse the backend's `mahder_db` and notification table. Run the service on the
+same Docker network so `mahder_postgres` and
+`hyperdata-backend-rabbitmq-1` resolve:
+
+```bash
+docker build -t hyperdata-notification:local .
+docker run --rm --name hyperdata-notification-service \
+  --network hyperdata-backend_backend_network \
+  --env-file .env \
+  -p 3002:3002 \
+  hyperdata-notification:local
+```
+
+This shared-database arrangement is for the current local E2E checkout. Use a
+separate `notifications` database in production when the backend notification
+read API is moved behind a service boundary.
+
 ### Production (External Services)
 
 For production with external PostgreSQL and RabbitMQ:
@@ -124,7 +148,7 @@ docker inspect --format='{{json .State.Health}}' notification-service
 You can also manually check the health endpoint:
 
 ```bash
-curl http://localhost:3000/health
+curl http://localhost:3002/health
 ```
 
 ## Viewing Logs
@@ -166,13 +190,15 @@ This results in a smaller final image size and improved security.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| PORT | No | 3000 | Application port |
+| PORT | No | 3002 | Application port |
 | NODE_ENV | No | production | Node environment |
 | DB_HOST | Yes | - | PostgreSQL host |
 | DB_PORT | Yes | - | PostgreSQL port |
 | DB_USERNAME | Yes | - | PostgreSQL username |
 | DB_PASSWORD | Yes | - | PostgreSQL password |
 | DB_DATABASE | Yes | - | PostgreSQL database name |
+| DB_URL | Yes | - | PostgreSQL connection URL used by TypeORM |
+| DATABASE_SCHEMA | Yes | public | PostgreSQL schema used by TypeORM |
 | RABBITMQ_HOST | Yes | - | RabbitMQ host |
 | RABBITMQ_PORT | Yes | - | RabbitMQ port |
 | RABBITMQ_USERNAME | Yes | - | RabbitMQ username |
@@ -201,13 +227,13 @@ Common issues:
 ### Health check failing
 
 The health check verifies:
-- Application is responding on port 3000
+- Application is responding on port 3002
 - Database connection is healthy
 - RabbitMQ connection is healthy
 
 Check the health endpoint manually:
 ```bash
-docker exec notification-service wget -qO- http://localhost:3000/health
+docker exec notification-service wget -qO- http://localhost:3002/health
 ```
 
 ### Cannot connect to external services
